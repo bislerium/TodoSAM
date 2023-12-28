@@ -1,0 +1,71 @@
+﻿@page "/"
+@using TodoSAM.Services
+@inject TodoService TodoService;
+
+<div class="d-flex flex-column justify-content-between p-4" style="height:100vh">
+    <div class="overflow-auto">
+
+        @if (TodoService.GetAll().Count() == 0)
+        {
+            <div class="d-flex align-items-center justify-content-center h-100">
+                <img src="img/sleep-emoji.png" class="h-50" />
+
+            </div>
+        }
+        else
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var task in TodoService.GetAll())
+                {
+                    <li @key="task.Id" class="list-group-item d-flex justify-content-between">
+
+                        <div class="fs-6 text-truncate">
+                            @if (task.IsCompleted)
+                            {
+                                <del class="text-success">@task.Task</del>
+                            }
+                            else
+                            {
+                                @task.Task
+                            }
+                        </div>
+                        <div class="d-flex flex-row flex-nowrap ms-2">
+                            <button type="button" class="btn" @onclick="(() => TodoService.ToggleCompletion(task.Id))">
+                                @if (task.IsCompleted)
+                                {
+                                    <span class="badge text-bg-success">@task.CompletedDateTime.ToString("G")</span>
+                                }
+                                else
+                                {                                    
+                                    <i class="bi bi-check-circle text-success"></i>
+                                }
+                            </button>
+
+                            <button type="button" class="btn" @onclick="(() => TodoService.Remove(task.Id))">
+                                <i class="bi bi-x-lg text-danger"></i>
+                            </button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+
+    <div class="mt-4">
+        <form class="row" @onsubmit="() => TodoService.Add(_todo)">
+            <div class="col-8 pe-2">
+                <InputText @bind-Value="_todo" class="form-control border-secondary" tabindex="0" placeholder="Add a new task!" required></InputText>
+            </div>
+            <div class="col-4">
+                <button type="submit" class="btn btn-outline-primary w-100">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@code {
+    private string _todo = string.Empty;
+}
