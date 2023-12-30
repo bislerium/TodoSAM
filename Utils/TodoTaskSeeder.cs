@@ -31,13 +31,13 @@ namespace TodoSAM.Utils
         private static bool GetRandomBool() => Random.Shared.Next(2) == 0;
 
 
-        internal static TodoTask[] Seed() => _tasks
+        internal static List<TodoTask> Seed() => _tasks
             .Select(t => new TodoTask() 
             { 
                 Task = t,
                 IsCompleted = GetRandomBool(),
                 IsImportant = GetRandomBool(),
             })
-            .ToArray();
+            .ToList();
     }
 }
