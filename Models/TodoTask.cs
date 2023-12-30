@@ -4,13 +4,13 @@ namespace TodoSAM.Models
 {
 
     //Example of Rich-Domain Model
-    public class TodoTask
+    internal class TodoTask
     {
-        public string Id { get; } = Guid.NewGuid().ToString();
+        internal string Id { get; } = Guid.NewGuid().ToString();
 
 
         private string _task;
-        public required string Task
+        internal required string Task
         {
             get
             {
@@ -32,7 +32,7 @@ namespace TodoSAM.Models
         }
 
         private bool _isCompleted = false;
-        public bool IsCompleted
+        internal bool IsCompleted
         {
             get
             {
@@ -53,8 +53,8 @@ namespace TodoSAM.Models
             }
         }
 
-        public bool IsImportant { get; set; } = false;
-        public DateTime CreatedAt { get; } = DateTime.Now;
-        public DateTime CompletedDateTime { get; private set; } = default;
+        internal bool IsImportant { get; set; } = false;
+        internal DateTime CreatedAt { get; } = DateTime.Now;
+        internal DateTime CompletedDateTime { get; private set; } = default;
     }
 }

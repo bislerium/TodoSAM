@@ -7,20 +7,20 @@ namespace TodoSAM.Services
 
         private readonly ICollection<TodoTask> _tasks;
 
-        public TodoService()
+        internal TodoService()
         {
             _tasks = [];
         }
 
-        public TodoService(ICollection<TodoTask> tasks)
+        internal TodoService(ICollection<TodoTask> tasks)
         {
             _tasks = tasks;
         }
 
-        public IEnumerable<TodoTask> GetAll() => _tasks
+        internal IEnumerable<TodoTask> GetAll() => _tasks
             .OrderBy(x => x.IsCompleted);
 
-        public void Add(string task)
+        internal void Add(string task)
         {
             TodoTask todoTask = new()
             {
@@ -29,25 +29,25 @@ namespace TodoSAM.Services
             _tasks.Add(todoTask);
         }
 
-        public void ToggleCompletion(string id)
+        internal void ToggleCompletion(string id)
         {
             TodoTask task = GetTaskByID(id);
             task.IsCompleted = !task.IsCompleted;
         }
 
-        public bool ToggleImportant(string id)
+        internal bool ToggleImportant(string id)
         {
             var item = GetTaskByID(id);
             return item.IsImportant = !item.IsImportant;
         }
 
-        public void Remove(string id)
+        internal void Remove(string id)
         {
             TodoTask task = GetTaskByID(id);
             _tasks.Remove(task);
         }
 
-        private TodoTask GetTaskByID(string id)
+        internal TodoTask GetTaskByID(string id)
         {
             return _tasks.Single(x => x.Id.Equals(id));
         }
