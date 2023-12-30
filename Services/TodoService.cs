@@ -17,10 +17,6 @@ namespace TodoSAM.Services
 
         public void Add(string task)
         {
-            //throw new NotImplementedException();
-            if (string.IsNullOrWhiteSpace(task))
-                return;
-
             TodoTask todoTask = new()
             {
                 Task = task,
@@ -30,17 +26,23 @@ namespace TodoSAM.Services
 
         public void ToggleCompletion(string id)
         {
-            TodoTask task = GetTasksByID(id);
+            TodoTask task = GetTaskByID(id);
             task.IsCompleted = !task.IsCompleted;
+        }
+
+        public bool ToggleImportant(string id)
+        {
+            var item = GetTaskByID(id);
+            return item.IsImportant = !item.IsImportant;
         }
 
         public void Remove(string id)
         {
-            TodoTask task = GetTasksByID(id);
+            TodoTask task = GetTaskByID(id);
             _tasks.Remove(task);
         }
 
-        private TodoTask GetTasksByID(string id)
+        private TodoTask GetTaskByID(string id)
         {
             return _tasks.Single(x => x.Id.Equals(id));
         }

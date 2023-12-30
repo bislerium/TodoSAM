@@ -17,7 +17,7 @@
             <ul class="list-group list-group-flush">
                 @foreach (var task in TodoService.GetAll())
                 {
-                    <li @key="task.Id" class="list-group-item d-flex justify-content-between">
+                    <li @key="task.Id" class="list-group-item d-flex justify-content-between @(task.IsImportant ? "list-group-item-warning" : "")">
 
                         <div class="fs-6 text-truncate">
                             @if (task.IsCompleted)
@@ -41,6 +41,10 @@
                                 }
                             </button>
 
+                            <button type="button" class="btn" @onclick="@(() => TodoService.ToggleImportant(task.Id))">
+                                <i class="bi @(task.IsImportant ? " bi-star-fill" : "bi-star") text-warning"></i>
+                            </button>
+
                             <button type="button" class="btn" @onclick="(() => TodoService.Remove(task.Id))">
                                 <i class="bi bi-x-lg text-danger"></i>
                             </button>
@@ -53,9 +57,9 @@
 
 
     <div class="mt-4">
-        <form class="row" @onsubmit="() => TodoService.Add(_todo)">
+        <form class="row" @onsubmit="InputTaskHandler">
             <div class="col-8 pe-2">
-                <InputText @bind-Value="_todo" class="form-control border-secondary" tabindex="0" placeholder="Add a new task!" required></InputText>
+                <InputText @bind-Value="_todo" class="form-control border-secondary" tabindex="0" placeholder="Add a new task!"></InputText>
             </div>
             <div class="col-4">
                 <button type="submit" class="btn btn-outline-primary w-100">Add</button>
@@ -68,4 +72,21 @@
 
 @code {
     private string _todo = string.Empty;
+
+    private void InputTaskHandler()
+    {
+        try
+        {
+            TodoService.Add(_todo);
+        }
+        catch (ArgumentException ex)
+        {
+            //Code to handle the exception. Example: A toast, snackbar, dialog to showcase error
+
+            //In a non-console app, Messages can be printed in output debug window as below:            
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+
+            return;
+        }
+    }
 }
