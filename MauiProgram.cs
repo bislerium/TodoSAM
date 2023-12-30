@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using TodoSAM.Services;
+using TodoSAM.Utils;
 
 namespace TodoSAM
 {
@@ -22,7 +23,10 @@ namespace TodoSAM
             builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<TodoService>();
+            // This where you register your services or service classes.
+            //builder.Services.AddSingleton<TodoService>();
+            builder.Services.AddSingleton(new TodoService(TodoTaskSeeder.Seed()));
+
             return builder.Build();
         }
     }

@@ -12,6 +12,11 @@ namespace TodoSAM.Services
             _tasks = [];
         }
 
+        public TodoService(ICollection<TodoTask> tasks)
+        {
+            _tasks = tasks;
+        }
+
         public IEnumerable<TodoTask> GetAll() => _tasks
             .OrderBy(x => x.IsCompleted);
 
