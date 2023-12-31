@@ -3,7 +3,7 @@
 @inject TodoService TodoService;
 
 <div class="d-flex flex-column justify-content-between p-4" style="height:100vh">
-    <div class="overflow-auto">
+    <div class="overflow-auto rounded">
 
         @if (TodoService.GetAll().Count() == 0)
         {
@@ -62,7 +62,7 @@
                 <InputText @bind-Value="_todo" class="form-control border-secondary" tabindex="0" placeholder="Add a new task!"></InputText>
             </div>
             <div class="col-4">
-                <button type="submit" class="btn btn-outline-primary w-100">Add</button>
+                <button type="submit" class="btn btn-primary w-100">Add</button>
             </div>
         </form>
     </div>
