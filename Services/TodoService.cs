@@ -17,8 +17,10 @@ namespace TodoSAM.Services
             _tasks = tasks;
         }
 
-        internal IEnumerable<TodoTask> GetAll() => _tasks
-            .OrderBy(x => x.IsCompleted);
+        internal ICollection<TodoTask> GetAll() => _tasks
+            .OrderBy(x => x.IsCompleted)
+            .ThenByDescending(x => x.CompletedDateTime)
+            .ToList();
 
         internal void Add(string task)
         {
@@ -29,21 +31,18 @@ namespace TodoSAM.Services
             _tasks.Add(todoTask);
         }
 
-        internal void ToggleCompletion(string id)
+        internal void ToggleCompletion(TodoTask task)
         {
-            TodoTask task = GetTaskByID(id);
             task.IsCompleted = !task.IsCompleted;
         }
 
-        internal bool ToggleImportant(string id)
+        internal bool ToggleImportant(TodoTask task)
         {
-            var item = GetTaskByID(id);
-            return item.IsImportant = !item.IsImportant;
+            return task.IsImportant = !task.IsImportant;
         }
 
-        internal void Remove(string id)
+        internal void Remove(TodoTask task)
         {
-            TodoTask task = GetTaskByID(id);
             _tasks.Remove(task);
         }
 
