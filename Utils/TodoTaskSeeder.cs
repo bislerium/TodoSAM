@@ -32,11 +32,13 @@ namespace TodoSAM.Utils
 
 
         internal static List<TodoTask> Seed() => _tasks
-            .Select(t => new TodoTask() 
-            { 
-                Task = t,
-                IsCompleted = GetRandomBool(),
-                IsImportant = GetRandomBool(),
+            .Select(task =>
+            {
+                string id = Guid.NewGuid().ToString();
+                bool isCompleted = GetRandomBool();
+                DateTime createdAt = DateTime.Now.AddHours(-Random.Shared.Next(2,4));
+                DateTime? completedAt = isCompleted ? createdAt.AddMinutes(Random.Shared.Next(10, 1 * 60)) : null;
+                return new TodoTask(id, task, isCompleted, GetRandomBool(), createdAt, completedAt);
             })
             .ToList();
     }

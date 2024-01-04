@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using TodoSAM.Models
+@using TodoSAM.Persistence
 @using TodoSAM.Services
 @inject TodoService TodoService;
 
@@ -22,10 +23,10 @@
                             }
                         </div>
                         <div class="d-flex flex-row flex-nowrap ms-2">
-                            <button type="button" class="btn" @onclick="(() => TodoService.ToggleCompletion(task))">
+                            <button type="button" class="btn" @onclick="(() => task.ToggleCompletion())">
                                 @if (task.IsCompleted)
                                 {
-                                    <span class="badge text-bg-success">@task.CompletedDateTime.ToString("G")</span>
+                                    <span class="badge text-bg-success">@task.CompletedAt?.ToString("G")</span>
                                 }
                                 else
                                 {
@@ -33,7 +34,7 @@
                                 }
                             </button>
 
-                            <button type="button" class="btn" @onclick="@(() => TodoService.ToggleImportant(task))">
+                            <button type="button" class="btn" @onclick="() => task.ToggleImportance()">
                                 <i class="bi @(task.IsImportant ? " bi-star-fill" : "bi-star") text-warning"></i>
                             </button>
 
@@ -75,6 +76,8 @@
         try
         {
             TodoService.Add(_todo);
+            TodoTasksPersistence.Flush(TodoService.GetAll());
+            TodoTasksPersistence.Load();
         }
         catch (ArgumentException ex)
         {

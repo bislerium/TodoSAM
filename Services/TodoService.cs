@@ -7,38 +7,20 @@ namespace TodoSAM.Services
 
         private readonly ICollection<TodoTask> _tasks;
 
-        internal TodoService()
+        internal TodoService(ICollection<TodoTask>? tasks = null)
         {
-            _tasks = [];
-        }
-
-        internal TodoService(ICollection<TodoTask> tasks)
-        {
-            _tasks = tasks;
+            _tasks = tasks ?? [];
         }
 
         internal ICollection<TodoTask> GetAll() => _tasks
             .OrderBy(x => x.IsCompleted)
-            .ThenByDescending(x => x.CompletedDateTime)
+            .ThenByDescending(x => x.CompletedAt)
             .ToList();
 
         internal void Add(string task)
         {
-            TodoTask todoTask = new()
-            {
-                Task = task,
-            };
+            TodoTask todoTask = TodoTask.Create(task);
             _tasks.Add(todoTask);
-        }
-
-        internal void ToggleCompletion(TodoTask task)
-        {
-            task.IsCompleted = !task.IsCompleted;
-        }
-
-        internal bool ToggleImportant(TodoTask task)
-        {
-            return task.IsImportant = !task.IsImportant;
         }
 
         internal void Remove(TodoTask task)
