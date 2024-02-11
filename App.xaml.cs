@@ -1,4 +1,6 @@
 ﻿
+using System.Diagnostics;
+
 namespace TodoSAM
 {
     public partial class App : Application
