@@ -1,0 +1,34 @@
+@using Microsoft.Maui.Storage;
+
+@if (isLoaded)
+{
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    private bool isLoaded;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public int CurrentCount { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pre
+        var result = await ProtectedSessionStore.GetAsync<int>("count");
+        CurrentCount = result.Success ? result.Value : 0;
+        isLoaded = true;
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await ProtectedSessionStore.SetAsync("count", CurrentCount);
+    }
+}

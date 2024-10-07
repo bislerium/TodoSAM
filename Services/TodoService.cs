@@ -1,21 +1,21 @@
 ﻿using TodoSAM.Models;
+using TodoSAM.Persistence;
 
 namespace TodoSAM.Services
 {
-    internal class TodoService
+    public class TodoService
     {
 
         private readonly ICollection<TodoTask> _tasks;
 
-        internal TodoService(ICollection<TodoTask>? tasks = null)
+        private readonly IRepository<TodoTask, Guid> _repository;
+
+        public TodoService(IRepository<TodoTask, Guid> repository)
         {
-            _tasks = tasks ?? [];
+            _repository = repository;
         }
 
-        internal ICollection<TodoTask> GetAll() => _tasks
-            .OrderBy(x => x.IsCompleted)
-            .ThenByDescending(x => x.CompletedAt)
-            .ToList();
+        public async Task<ICollection<TodoTask>> GetAll() => _tasks = (await _repository.GetAllAsync()).ToList();
 
         internal void Add(string task)
         {

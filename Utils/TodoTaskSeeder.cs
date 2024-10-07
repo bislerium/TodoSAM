@@ -2,7 +2,7 @@
 
 namespace TodoSAM.Utils
 {
-    internal static class TodoTaskSeeder
+    public static class TodoTaskSeeder
     {
         private static readonly string[] _tasks = {
             "Complete project proposal",
@@ -31,14 +31,22 @@ namespace TodoSAM.Utils
         private static bool GetRandomBool() => Random.Shared.Next(2) == 0;
 
 
-        internal static List<TodoTask> Seed() => _tasks
+        public static List<TodoTask> Seed() => _tasks
             .Select(task =>
             {
-                string id = Guid.NewGuid().ToString();
-                bool isCompleted = GetRandomBool();
-                DateTime createdAt = DateTime.Now.AddHours(-Random.Shared.Next(2,4));
+                var id = Guid.NewGuid();
+                var isCompleted = GetRandomBool();
+                var createdAt = DateTime.Now.AddHours(-Random.Shared.Next(2,4));
                 DateTime? completedAt = isCompleted ? createdAt.AddMinutes(Random.Shared.Next(10, 1 * 60)) : null;
-                return new TodoTask(id, task, isCompleted, GetRandomBool(), createdAt, completedAt);
+                return new TodoTask()
+                {
+                    Id = id,
+                    Task = task,
+                    IsCompleted = isCompleted,
+                    IsImportant = GetRandomBool(),
+                    CreatedAt = createdAt,
+                    CompletedAt = completedAt
+                };
             })
             .ToList();
     }

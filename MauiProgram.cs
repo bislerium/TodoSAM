@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TodoSAM.Models;
 using TodoSAM.Persistence;
 using TodoSAM.Services;
 using TodoSAM.Utils;
@@ -7,7 +8,7 @@ namespace TodoSAM
 {
     public static class MauiProgram
     {
-        public static MauiApp CreateMauiApp()
+        public static async Task<MauiApp> CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
             builder
@@ -24,14 +25,9 @@ namespace TodoSAM
             builder.Logging.AddDebug();
 #endif
 
-            // This where you register your services or service classes.
-            //builder.Services.AddSingleton<TodoService>();
-            builder.Services.AddSingleton(new TodoService(TodoTaskSeeder.Seed()));
-
-            builder.Services.AddHostedService<TodoTasksPersistenceBackgroundTask>();
-
-
-
+            await Migrator.Migrate();
+            
+            builder.Services.AddTransient(sp => RepositoryResolver.GetTodoTaskRepository());   
 
             return builder.Build();
         }
